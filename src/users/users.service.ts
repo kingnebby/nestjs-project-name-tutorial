@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 
 // Seed users
 const nebby = new User('kingnebby@wayvdev.com', 'password');
-nebby.roles = [Role.Admin];
+nebby.roles = [Role.Admin, Role.User];
 const ash = new User('ash@wayvdev.com', 'password');
 ash.roles = [Role.User];
 const users: User[] = [nebby, ash];
