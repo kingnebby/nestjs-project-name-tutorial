@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { Role } from 'src/authz/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
-// Seed user
-const users: User[] = [new User('kingnebby@wayvdev.com', 'password')];
+// Seed users
+const nebby = new User('kingnebby@wayvdev.com', 'password');
+nebby.roles = [Role.Admin];
+const ash = new User('ash@wayvdev.com', 'password');
+ash.roles = [Role.User];
+const users: User[] = [nebby, ash];
 
 @Injectable()
 export class UsersService {
