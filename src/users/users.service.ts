@@ -19,7 +19,7 @@ export class UsersService {
     return user;
   }
 
-  findAll() {
+  async findAll() {
     return users;
   }
 
@@ -35,6 +35,7 @@ export class UsersService {
   update(id: number, updateUserDto: UpdateUserDto) {
     const index = users.findIndex((e) => e.id === id);
     users[index] = { ...users[index], ...updateUserDto };
+    return users[index];
   }
 
   remove(id: number) {

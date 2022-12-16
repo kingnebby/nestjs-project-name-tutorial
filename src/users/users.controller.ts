@@ -13,6 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/public.decorator';
 import { Roles } from 'src/authz/roles.decorator';
 import { Role } from 'src/authz/role.enum';
+import { UserDto } from './dto/user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -26,18 +27,21 @@ export class UsersController {
 
   @Public()
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(): Promise<UserDto[]> {
+    return this.usersService.findAll() as Promise<UserDto[]>;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<UserDto> {
+    return this.usersService.findOne(+id) as Promise<UserDto>;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): UserDto {
+    return this.usersService.update(+id, updateUserDto) as UserDto;
   }
 
   @Delete(':id')
