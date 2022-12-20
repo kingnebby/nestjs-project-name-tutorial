@@ -9,7 +9,9 @@
 
 // typescript-axios (axios)
 import { Configuration, DefaultApi } from '../ts-cli';
+import axios from 'axios';
 
+// Global CLI
 const c = new Configuration({ basePath: 'http://localhost:3000' });
 const api = new DefaultApi(c);
 
@@ -17,20 +19,46 @@ async function start() {
   const response = await api.usersControllerFindAll();
   console.log(response.data);
 
-  const authToken = await api.authControllerLogin({
+  const userClient = await getUserClient({
     username: 'ash@wayvdev.com',
     password: 'password',
   });
-  console.log(authToken.data);
-
-  // How to specify auth requirements in the swagger?? and the generated codez?
-  const profile = await api.authControllerGetProfile();
+  const profile = await userClient.authControllerGetProfile();
   console.log(profile.data);
 
-  const createdUser = await api.usersControllerCreate({
+  // Should fail.
+  try {
+    await userClient.usersControllerCreate({
+      email: 'root@root.com',
+    });
+  } catch (error) {
+    console.log(error.response.data);
+  }
+
+  const adminClient = await getUserClient({
+    username: 'kingnebby@wayvdev.com',
+    password: 'password',
+  });
+  await adminClient.usersControllerCreate({
     email: 'root@root.com',
   });
-  console.log(createdUser.data);
+
+  const findAllResponse = await api.usersControllerFindAll();
+  console.log(findAllResponse.data);
+}
+
+async function getUserClient({ username, password }) {
+  const authToken = await api.authControllerLogin({
+    username,
+    password,
+  });
+  const { access_token } = authToken.data;
+  const axiosInstance = axios.create({
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+
+  const userClient = new DefaultApi(c, undefined, axiosInstance);
+  return userClient;
 }
 
 start();

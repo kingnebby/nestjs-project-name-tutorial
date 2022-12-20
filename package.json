@@ -9,6 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "gen-cli": "rm -rf ./ts-cli && openapi-generator-cli generate -i dist/swagger.json -g typescript-axios -o ./ts-cli",
     "spike": "node -r ts-node/register spike/httpClient.ts",
     "start": "nest start",
     "start:dev": "nest start --watch",
